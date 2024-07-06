@@ -4,9 +4,11 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "pnpm -F practice2 dev"
+    "dev-practice2": "pnpm -F practice2 dev",
+    "dev-practice3": "pnpm -F practice3 dev"
   },
   "dependencies": {
+    "@tensorflow/tfjs": "^4.20.0",
     "@tensorflow/tfjs-backend-cpu": "^4.20.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
