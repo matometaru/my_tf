@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev-practice2": "pnpm -F practice2 dev",
-    "dev-practice3": "pnpm -F practice3 dev"
+    "dev-practice3": "pnpm -F practice3 dev",
+    "dev-practice4": "pnpm -F practice4 dev"
   },
   "dependencies": {
     "@tensorflow/tfjs": "^4.20.0",
