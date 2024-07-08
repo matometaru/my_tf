@@ -13,9 +13,9 @@ function C_4_4_2() {
     const newSize: [number, number] = [768, 560]
     tf.tidy(() => {
       const imgTensor = tf.browser.fromPixels(img);
-      const resizeTensor = tf.image.resizeBilinear(imgTensor, newSize, true);
-      const scaledTensor = resizeTensor.div(255) as tf.Tensor3D;
-      tf.browser.toPixels(scaledTensor, blCanvas);
+      const resizeTensor = tf.image.resizeBilinear(imgTensor, newSize, true) ;
+      const blResizeTensorInt = resizeTensor.asType('int32')
+      tf.browser.toPixels(blResizeTensorInt, blCanvas);
     })
   };
 
@@ -24,7 +24,7 @@ function C_4_4_2() {
     const ctx = nnCanvas.getContext('2d');
     if (!ctx) return;
 
-    const newSize: [number, number] = [768, 560]
+    const newSize: [number, number] = [768, 200]
     tf.tidy(() => {
       const imgTensor = tf.browser.fromPixels(img);
       const resizeTensor = tf.image.resizeNearestNeighbor(imgTensor, newSize, true);
