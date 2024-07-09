@@ -23,7 +23,7 @@ function drawDetection(img: HTMLImageElement, boundingBox: [number, number, numb
 }
 
 function C_5_4_1() {
-  const model = useData('mobilenet', () =>  tf.loadLayersModel(modelPath))
+  const model = useData('pet', () =>  tf.loadLayersModel(modelPath))
   const [imageSrc, setImageSrc] = useState('dog1.jpg');
 
   const handleImageLoad = () => {
