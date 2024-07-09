@@ -52,11 +52,6 @@ pre {
   font-family: 'Courier New', Courier, monospace; /* 等幅フォント */
 }
 
-img {
-  width: 200px;
-  height: auto;
-}
-
 table {
   border-collapse: collapse;
   width: 100px;
