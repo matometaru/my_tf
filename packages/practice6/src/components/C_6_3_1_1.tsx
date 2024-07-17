@@ -13,7 +13,7 @@ const getTopN = (t: tf.Tensor3D, n: number): Sorted => {
   return tf.topk(topvValues, n)
 }
 
-function C_6_3_1() {
+function C_6_3_1_1() {
   const model = useData('ssd_mobilenet_v2', loadModel)
   const [imageSrc, setImageSrc] = useState('dinner.jpg');
 
@@ -28,13 +28,7 @@ function C_6_3_1() {
         const boxes = result[1].squeeze().arraySync();
 
         const canvas = document.getElementById('detection') as HTMLCanvasElement;
-        const ctx = canvas.getContext('2d');
-        if (!ctx) return;
-
-        const imgWidth = img.width;
-        const imgHeight = img.height;
-        canvas.width = imgWidth;
-        canvas.height = imgHeight;
+        const { ctx, imgWidth, imgHeight } = setCanvasByImg(canvas, img)
 
         for (const index of top20Index) {
           drawDetection(ctx, { imgWidth, imgHeight }, boxes[index]);
@@ -45,7 +39,7 @@ function C_6_3_1() {
 
   return (
     <div>
-      <p>C_6_3_1</p>
+      <p>C_6_3_1_1</p>
       <div style={{ position: 'relative', height: '80vh' }}>
         <img src={imageSrc} id="img" onLoad={handleImageLoad} height={'100%'} />
         <canvas id="detection" style={{ position: 'absolute', left: 0 }} />
@@ -54,10 +48,23 @@ function C_6_3_1() {
   );
 }
 
-export default C_6_3_1;
+export default C_6_3_1_1;
+
+function setCanvasByImg(canvas: HTMLCanvasElement, img: HTMLImageElement) {
+  const ctx = canvas.getContext('2d');
+  if (!ctx) {
+    throw new Error('2d context is not supported');
+  }
+
+  const imgWidth = img.width;
+  const imgHeight = img.height;
+  canvas.width = imgWidth;
+  canvas.height = imgHeight;
+
+  return { ctx, imgWidth, imgHeight }
+}
 
 type BoundingBox = [number, number, number, number]
-
 function drawDetection(ctx, { imgWidth, imgHeight }, box: BoundingBox) {
   const startX = box[1] * imgWidth;
   const startY = box[0] * imgHeight;
