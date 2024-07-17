@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import * as tf from '@tensorflow/tfjs';
 import { useData } from '../hooks/useData'
 import { loadModel } from '../utils'
+import { CLASSES } from "../labels";
 
 function C_6_3_2() {
   const model = useData('ssd_mobilenet_v2', loadModel)
@@ -14,24 +15,27 @@ function C_6_3_2() {
       const readyfied = tf.expandDims(imgTensor, 0);
 
       model.executeAsync(readyfied).then(async (result) => {
-        const boxes: tf.Tensor2D = result[1].squeeze();
-        const scores: tf.Tensor1D = tf.topk(result[0]).values.squeeze<tf.Tensor<tf.Rank.R1>>()
+        const boxesTensor: tf.Tensor2D = result[1].squeeze();
+        const scoresTensor: tf.Tensor1D = tf.topk(result[0]).values.squeeze<tf.Tensor<tf.Rank.R1>>()
         const { selectedIndices } = await tf.image.nonMaxSuppressionWithScoreAsync(
-          boxes,
-          scores,
+          boxesTensor,
+          scoresTensor,
           10, // 選択するボックスの最大数
           0.5, // iouThreshold
           0.3, // scoreThreshold: このスコア閾値よりも低いスコアを持つボックスは、重複抑制処理の前に無視されます。
           1
         );
-        selectedIndices.print()
         const selectedBoxes = selectedIndices.dataSync()
 
         const canvas = document.getElementById('detection') as HTMLCanvasElement;
         const { ctx, imgWidth, imgHeight } = setCanvasByImg(canvas, img)
-        const boxesArray = boxes.arraySync() as BoundingBox[]
+
+        const maxIndices = tf.topk(result[0]).indices.squeeze<tf.Tensor<tf.Rank.R1>>().arraySync()
+        const boxes = boxesTensor.arraySync() as BoundingBox[]
+        const score = scoresTensor.arraySync()
         for (const i of selectedBoxes) {
-          drawDetection(ctx, { imgWidth, imgHeight }, boxesArray[i]);
+          console.log(CLASSES[maxIndices[i]], score[i])
+          drawDetection(ctx, { imgWidth, imgHeight }, boxes[i]);
         }
       })
     }
